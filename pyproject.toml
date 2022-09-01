@@ -2,7 +2,7 @@
 name = "nonebot-plugin-localstore"
 version = "0.1.0"
 description = "Local Storage Support for NoneBot2"
-authors = ["yanyongyu <yanyongyu_1@126.com>"]
+authors = ["yanyongyu <yyy@nonebot.dev>"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/nonebot/plugin-localstore"
