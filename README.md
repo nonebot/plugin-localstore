@@ -1,12 +1,16 @@
+<!-- markdownlint-disable MD041 -->
 <p align="center">
-  <a href="https://v2.nonebot.dev/"><img src="https://raw.githubusercontent.com/nonebot/nonebot2/master/docs/.vuepress/public/logo.png" width="200" height="200" alt="nonebot"></a>
+  <a href="https://v2.nonebot.dev/"><img src="https://v2.nonebot.dev/logo.png" width="200" height="200" alt="nonebot"></a>
 </p>
 
 <div align="center">
 
 # NoneBot Plugin LocalStore
 
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable-next-line MD036 -->
 _✨ NoneBot 本地存储插件 ✨_
+<!-- prettier-ignore-end -->
 
 </div>
 
@@ -22,12 +26,14 @@ _✨ NoneBot 本地存储插件 ✨_
 
 ## 使用方式
 
-加载插件后使用 `require` 获取导出方法
+加载插件后使用 `require` 声明插件依赖，直接使用 `localstore` 插件提供的函数即可。
 
 ```python
 from nonebot import require
 
-store = require("nonebot_plugin_localstore")
+require("nonebot_plugin_localstore")
+
+import nonebot_plugin_localstore as store
 
 plugin_cache_dir = store.get_cache_dir("plugin_name")
 plugin_cache_file = store.get_cache_file("plugin_name", "filename")
