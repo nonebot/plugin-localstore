@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nonebot-plugin-localstore"
-version = "0.1.0"
+version = "0.2.0"
 description = "Local Storage Support for NoneBot2"
 authors = ["yanyongyu <yyy@nonebot.dev>"]
 license = "MIT"
@@ -12,7 +12,7 @@ keywords = ["nonebot2", "qq", "plugin"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-nonebot2 = "^2.0.0-beta.5"
+nonebot2 = "^2.0.0-rc.1"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.10.1"
