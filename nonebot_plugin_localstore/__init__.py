@@ -10,7 +10,7 @@ BASE_DATA_DIR = user_data_dir(APP_NAME).resolve()
 
 
 def get_cache_dir(plugin_name: Optional[str]) -> Path:
-    return BASE_CACHE_DIR / plugin_name if plugin_name else BASE_CONFIG_DIR
+    return BASE_CACHE_DIR / plugin_name if plugin_name else BASE_CACHE_DIR
 
 
 def get_cache_file(plugin_name: Optional[str], filename: str) -> Path:
@@ -26,7 +26,7 @@ def get_config_file(plugin_name: Optional[str], filename: str) -> Path:
 
 
 def get_data_dir(plugin_name: Optional[str]) -> Path:
-    return BASE_DATA_DIR / plugin_name if plugin_name else BASE_CONFIG_DIR
+    return BASE_DATA_DIR / plugin_name if plugin_name else BASE_DATA_DIR
 
 
 def get_data_file(plugin_name: Optional[str], filename: str) -> Path:
