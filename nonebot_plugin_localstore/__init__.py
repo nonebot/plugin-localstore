@@ -1,31 +1,33 @@
 from pathlib import Path
+from typing import Optional
 
 from .data_source import user_data_dir, user_cache_dir, user_config_dir
 
-BASE_CACHE_DIR = Path(user_cache_dir("nonebot2")).resolve()
-BASE_CONFIG_DIR = Path(user_config_dir("nonebot2")).resolve()
-BASE_DATA_DIR = Path(user_data_dir("nonebot2")).resolve()
+APP_NAME = "nonebot2"
+BASE_CACHE_DIR = user_cache_dir(APP_NAME).resolve()
+BASE_CONFIG_DIR = user_config_dir(APP_NAME).resolve()
+BASE_DATA_DIR = user_data_dir(APP_NAME).resolve()
 
 
-def get_cache_dir(plugin_name: str) -> str:
-    return str(BASE_CACHE_DIR / plugin_name)
+def get_cache_dir(plugin_name: Optional[str]) -> Path:
+    return BASE_CACHE_DIR / plugin_name if plugin_name else BASE_CONFIG_DIR
 
 
-def get_cache_file(plugin_name: str, filename: str) -> str:
-    return str(BASE_CACHE_DIR / plugin_name / filename)
+def get_cache_file(plugin_name: Optional[str], filename: str) -> Path:
+    return get_cache_dir(plugin_name) / filename
 
 
-def get_config_dir(plugin_name: str) -> str:
-    return str(BASE_CONFIG_DIR / plugin_name)
+def get_config_dir(plugin_name: Optional[str]) -> Path:
+    return BASE_CONFIG_DIR / plugin_name if plugin_name else BASE_CONFIG_DIR
 
 
-def get_config_file(plugin_name: str, filename: str) -> str:
-    return str(BASE_CONFIG_DIR / plugin_name / filename)
+def get_config_file(plugin_name: Optional[str], filename: str) -> Path:
+    return get_config_dir(plugin_name) / filename
 
 
-def get_data_dir(plugin_name: str) -> str:
-    return str(BASE_DATA_DIR / plugin_name)
+def get_data_dir(plugin_name: Optional[str]) -> Path:
+    return BASE_DATA_DIR / plugin_name if plugin_name else BASE_CONFIG_DIR
 
 
-def get_data_file(plugin_name: str, filename: str) -> str:
-    return str(BASE_DATA_DIR / plugin_name / filename)
+def get_data_file(plugin_name: Optional[str], filename: str) -> Path:
+    return get_data_dir(plugin_name) / filename

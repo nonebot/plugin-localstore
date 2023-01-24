@@ -9,7 +9,7 @@
 
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable-next-line MD036 -->
-_✨ NoneBot 本地存储插件 ✨_
+_✨ NoneBot 本地数据存储插件 ✨_
 <!-- prettier-ignore-end -->
 
 </div>
@@ -21,7 +21,7 @@ _✨ NoneBot 本地存储插件 ✨_
   <a href="https://pypi.python.org/pypi/nonebot-plugin-localstore">
     <img src="https://img.shields.io/pypi/v/nonebot-plugin-localstore.svg" alt="pypi">
   </a>
-  <img src="https://img.shields.io/badge/python-3.7+-blue.svg" alt="python">
+  <img src="https://img.shields.io/badge/python-3.8+-blue.svg" alt="python">
 </p>
 
 ## 使用方式
@@ -29,21 +29,30 @@ _✨ NoneBot 本地存储插件 ✨_
 加载插件后使用 `require` 声明插件依赖，直接使用 `localstore` 插件提供的函数即可。
 
 ```python
+from pathlib import Path
 from nonebot import require
 
 require("nonebot_plugin_localstore")
 
 import nonebot_plugin_localstore as store
 
-plugin_cache_dir = store.get_cache_dir("plugin_name")
-plugin_cache_file = store.get_cache_file("plugin_name", "filename")
-plugin_config_dir = store.get_config_dir("plugin_name", "filename")
-plugin_config_file = store.get_config_file("plugin_name", "filename")
-plugin_data_dir = store.get_data_dir("plugin_name")
-plugin_data_file = store.get_data_file("plugin_name", "filename")
+plugin_cache_dir: Path = store.get_cache_dir("plugin_name")
+plugin_cache_file: Path = store.get_cache_file("plugin_name", "filename")
+plugin_config_dir: Path = store.get_config_dir("plugin_name", "filename")
+plugin_config_file: Path = store.get_config_file("plugin_name", "filename")
+plugin_data_dir: Path = store.get_data_dir("plugin_name")
+plugin_data_file: Path = store.get_data_file("plugin_name", "filename")
 ```
 
 ## 存储路径
+
+在项目安装插件后，可以使用 `nb-cli` 查看具体的存储路径：
+
+```bash
+nb localstore
+```
+
+参考路径如下：
 
 ### cache path
 

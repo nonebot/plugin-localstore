@@ -1,22 +1,12 @@
 import os
 import sys
-import contextlib
+from pathlib import Path
+from typing import Literal
 
 WINDOWS = sys.platform.startswith("win") or (sys.platform == "cli" and os.name == "nt")
 
 
-def expanduser(path):
-    """
-    Expand ~ and ~user constructions.
-    Includes a workaround for http://bugs.python.org/issue14768
-    """
-    expanded = os.path.expanduser(path)
-    if path.startswith("~/") and expanded.startswith("//"):
-        expanded = expanded[1:]
-    return expanded
-
-
-def user_cache_dir(appname):
+def user_cache_dir(appname: str) -> Path:
     r"""
     Return full path to the user-specific cache dir for this application.
         "appname" is the name of application.
@@ -34,28 +24,14 @@ def user_cache_dir(appname):
     OPINION: This function appends "Cache" to the `CSIDL_LOCAL_APPDATA` value.
     """
     if WINDOWS:
-        # Get the base path
-        path = os.path.normpath(_get_win_folder("CSIDL_LOCAL_APPDATA"))
-
-        # Add our app name and Cache directory to it
-        path = os.path.join(path, appname, "Cache")
+        return _get_win_folder("CSIDL_LOCAL_APPDATA") / appname / "Cache"
     elif sys.platform == "darwin":
-        # Get the base path
-        path = expanduser("~/Library/Caches")
-
-        # Add our app name to it
-        path = os.path.join(path, appname)
+        return Path("~/Library/Caches").expanduser() / appname
     else:
-        # Get the base path
-        path = os.getenv("XDG_CACHE_HOME", expanduser("~/.cache"))
-
-        # Add our app name to it
-        path = os.path.join(path, appname)
-
-    return path
+        return Path(os.getenv("XDG_CACHE_HOME", "~/.cache")).expanduser() / appname
 
 
-def user_data_dir(appname, roaming=False):
+def user_data_dir(appname: str, roaming: bool = False) -> Path:
     r"""
     Return full path to the user-specific data dir for this application.
         "appname" is the name of application.
@@ -81,18 +57,14 @@ def user_data_dir(appname, roaming=False):
     """
     if WINDOWS:
         const = "CSIDL_APPDATA" if roaming else "CSIDL_LOCAL_APPDATA"
-        path = os.path.join(os.path.normpath(_get_win_folder(const)), appname)
+        return Path(_get_win_folder(const)) / appname
     elif sys.platform == "darwin":
-        path = os.path.join(expanduser("~/Library/Application Support/"), appname)
+        return Path("~/Library/Application Support/").expanduser() / appname
     else:
-        path = os.path.join(
-            os.getenv("XDG_DATA_HOME", expanduser("~/.local/share")), appname
-        )
-
-    return path
+        return Path(os.getenv("XDG_DATA_HOME", "~/.local/share")).expanduser() / appname
 
 
-def user_config_dir(appname, roaming=True):
+def user_config_dir(appname: str, roaming: bool = True) -> Path:
     """Return full path to the user-specific config dir for this application.
         "appname" is the name of application.
             If None, just the system directory is returned.
@@ -110,63 +82,23 @@ def user_config_dir(appname, roaming=True):
     That means, by default "~/.config/<AppName>".
     """
     if WINDOWS:
-        path = user_data_dir(appname, roaming=roaming)
+        return user_data_dir(appname, roaming=roaming)
     elif sys.platform == "darwin":
-        path = user_data_dir(appname)
+        return user_data_dir(appname)
     else:
-        path = os.getenv("XDG_CONFIG_HOME", expanduser("~/.config"))
-        path = os.path.join(path, appname)
-
-    return path
-
-
-# for the discussion regarding site_config_dirs locations
-# see <https://github.com/pypa/pip/issues/1733>
-def site_config_dirs(appname):
-    r"""Return a list of potential user-shared config dirs for this application.
-        "appname" is the name of application.
-    Typical user config directories are:
-        macOS:      /Library/Application Support/<AppName>/
-        Unix:       /etc or $XDG_CONFIG_DIRS[i]/<AppName>/ for each value in
-                    $XDG_CONFIG_DIRS
-        Win XP:     C:\Documents and Settings\All Users\Application ...
-                    ...Data\<AppName>\
-        Vista:      (Fail! "C:\ProgramData" is a hidden *system* directory
-                    on Vista.)
-        Win 7:      Hidden, but writeable on Win 7:
-                    C:\ProgramData\<AppName>\
-    """
-    if WINDOWS:
-        path = os.path.normpath(_get_win_folder("CSIDL_COMMON_APPDATA"))
-        pathlist = [os.path.join(path, appname)]
-    elif sys.platform == "darwin":
-        pathlist = [os.path.join("/Library/Application Support", appname)]
-    else:
-        # try looking in $XDG_CONFIG_DIRS
-        if xdg_config_dirs := os.getenv("XDG_CONFIG_DIRS", "/etc/xdg"):
-            pathlist = [
-                os.path.join(expanduser(x), appname)
-                for x in xdg_config_dirs.split(os.pathsep)
-            ]
-        else:
-            pathlist = []
-
-        # always look in /etc directly as well
-        pathlist.append("/etc")
-
-    return pathlist
+        return Path(os.getenv("XDG_CONFIG_HOME", "~/.config")).expanduser() / appname
 
 
 # -- Windows support functions --
-
-
-def _get_win_folder_from_registry(csidl_name):
+def _get_win_folder_from_registry(
+    csidl_name: Literal["CSIDL_APPDATA", "CSIDL_COMMON_APPDATA", "CSIDL_LOCAL_APPDATA"]
+) -> Path:
     """
     This is a fallback technique at best. I'm not sure if using the
     registry for this guarantees us the correct answer for all CSIDL_*
     names.
     """
-    import _winreg
+    import winreg
 
     shell_folder_name = {
         "CSIDL_APPDATA": "AppData",
@@ -174,15 +106,17 @@ def _get_win_folder_from_registry(csidl_name):
         "CSIDL_LOCAL_APPDATA": "Local AppData",
     }[csidl_name]
 
-    key = _winreg.OpenKey(
-        _winreg.HKEY_CURRENT_USER,
+    key = winreg.OpenKey(
+        winreg.HKEY_CURRENT_USER,
         r"Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders",
     )
-    directory, _type = _winreg.QueryValueEx(key, shell_folder_name)
-    return directory
+    directory, _type = winreg.QueryValueEx(key, shell_folder_name)
+    return Path(directory)
 
 
-def _get_win_folder_with_ctypes(csidl_name):
+def _get_win_folder_with_ctypes(
+    csidl_name: Literal["CSIDL_APPDATA", "CSIDL_COMMON_APPDATA", "CSIDL_LOCAL_APPDATA"]
+) -> Path:
     csidl_const = {
         "CSIDL_APPDATA": 26,
         "CSIDL_COMMON_APPDATA": 35,
@@ -200,7 +134,7 @@ def _get_win_folder_with_ctypes(csidl_name):
         if ctypes.windll.kernel32.GetShortPathNameW(buf.value, buf2, 1024):
             buf = buf2
 
-    return buf.value
+    return Path(buf.value)
 
 
 if WINDOWS:
@@ -210,17 +144,3 @@ if WINDOWS:
         _get_win_folder = _get_win_folder_with_ctypes
     except ImportError:
         _get_win_folder = _get_win_folder_from_registry
-
-
-def _win_path_to_bytes(path):
-    """Encode Windows paths to bytes. Only used on Python 2.
-    Motivation is to be consistent with other operating systems where paths
-    are also returned as bytes. This avoids problems mixing bytes and Unicode
-    elsewhere in the codebase. For more details and discussion see
-    <https://github.com/pypa/pip/issues/3463>.
-    If encoding using ASCII and MBCS fails, return the original Unicode path.
-    """
-    for encoding in ("ASCII", "MBCS"):
-        with contextlib.suppress(UnicodeEncodeError, LookupError):
-            return path.encode(encoding)
-    return path
