@@ -13,6 +13,7 @@ keywords = ["nonebot2", "qq", "plugin"]
 [tool.poetry.dependencies]
 python = "^3.8"
 nonebot2 = "^2.0.0-rc.1"
+typing-extensions = ">=4.0.0"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.10.1"
