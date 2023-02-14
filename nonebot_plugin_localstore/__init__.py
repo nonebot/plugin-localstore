@@ -12,10 +12,11 @@ BASE_CONFIG_DIR = user_config_dir(APP_NAME).resolve()
 BASE_DATA_DIR = user_data_dir(APP_NAME).resolve()
 
 
-def _ensure_dir(path: Path):
-    if not path.is_dir():
+def _ensure_dir(path: Path) -> None:
+    if not path.exists():
+        path.mkdir(parents=True, exist_ok=True)
+    elif not path.is_dir():
         raise RuntimeError(f"{path} is not a directory")
-    path.mkdir(parents=True, exist_ok=True)
 
 
 def _auto_create_dir(func: Callable[P, Path]) -> Callable[P, Path]:
