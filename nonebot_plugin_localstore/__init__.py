@@ -2,7 +2,28 @@ from pathlib import Path
 from typing import Callable, Optional
 from typing_extensions import ParamSpec
 
+from nonebot.plugin import PluginMetadata
+
 from .data_source import user_data_dir, user_cache_dir, user_config_dir
+
+__plugin_meta__ = PluginMetadata(
+    name="本地数据存储",
+    description="存储插件数据至本地文件",
+    usage=(
+        '声明依赖: `require("nonebot_plugin_localstore")`\n'
+        "导入所需文件夹:\n"
+        '  `cache_dir = store.get_cache_dir("plugin_name")`\n'
+        '  `cache_file = store.get_cache_file("plugin_name", "file_name")`\n'
+        '  `data_dir = store.get_data_dir("plugin_name")`\n'
+        '  `data_file = store.get_data_file("plugin_name", "file_name")`\n'
+        '  `config_dir = store.get_config_dir("plugin_name")`\n'
+        '  `config_file = store.get_config_file("plugin_name", "file_name")`'
+    ),
+    type="library",
+    homepage="https://github.com/nonebot/plugin-localstore",
+    config=None,
+    supported_adapters=None,
+)
 
 P = ParamSpec("P")
 
