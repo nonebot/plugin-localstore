@@ -1,7 +1,8 @@
 from pathlib import Path
 from typing import Optional
 
-from pydantic import BaseModel, Extra
+from pydantic import Extra, BaseModel
+
 
 class Config(BaseModel, extra=Extra.ignore):
     localstore_cache_dir: Optional[Path] = None
