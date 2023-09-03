@@ -35,17 +35,17 @@ APP_NAME = "nonebot2"
 BASE_CACHE_DIR = (
     user_cache_dir(APP_NAME).resolve()
     if plugin_config.localstore_cache_dir is None
-    else plugin_config.localstore_cache_dir
+    else plugin_config.localstore_cache_dir.resolve()
 )
 BASE_CONFIG_DIR = (
     user_config_dir(APP_NAME).resolve()
     if plugin_config.localstore_config_dir is None
-    else plugin_config.localstore_config_dir
+    else plugin_config.localstore_config_dir.resolve()
 )
 BASE_DATA_DIR = (
     user_data_dir(APP_NAME).resolve()
     if plugin_config.localstore_data_dir is None
-    else plugin_config.localstore_data_dir
+    else plugin_config.localstore_data_dir.resolve()
 )
 
 
