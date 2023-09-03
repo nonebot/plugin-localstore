@@ -2,8 +2,10 @@ from pathlib import Path
 from typing import Callable, Optional
 from typing_extensions import ParamSpec
 
+from nonebot import get_driver
 from nonebot.plugin import PluginMetadata
 
+from .config import Config
 from .data_source import user_data_dir, user_cache_dir, user_config_dir
 
 __plugin_meta__ = PluginMetadata(
@@ -21,16 +23,30 @@ __plugin_meta__ = PluginMetadata(
     ),
     type="library",
     homepage="https://github.com/nonebot/plugin-localstore",
-    config=None,
+    config=Config,
     supported_adapters=None,
 )
+
+plugin_config = Config.parse_obj(get_driver().config)
 
 P = ParamSpec("P")
 
 APP_NAME = "nonebot2"
-BASE_CACHE_DIR = user_cache_dir(APP_NAME).resolve()
-BASE_CONFIG_DIR = user_config_dir(APP_NAME).resolve()
-BASE_DATA_DIR = user_data_dir(APP_NAME).resolve()
+BASE_CACHE_DIR = (
+    user_cache_dir(APP_NAME).resolve()
+    if plugin_config.localstore_cache_dir is None
+    else plugin_config.localstore_cache_dir.resolve()
+)
+BASE_CONFIG_DIR = (
+    user_config_dir(APP_NAME).resolve()
+    if plugin_config.localstore_config_dir is None
+    else plugin_config.localstore_config_dir.resolve()
+)
+BASE_DATA_DIR = (
+    user_data_dir(APP_NAME).resolve()
+    if plugin_config.localstore_data_dir is None
+    else plugin_config.localstore_data_dir.resolve()
+)
 
 
 def _ensure_dir(path: Path) -> None:
