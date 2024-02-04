@@ -27,7 +27,7 @@ __plugin_meta__ = PluginMetadata(
     supported_adapters=None,
 )
 
-plugin_config = Config.parse_obj(get_driver().config)
+plugin_config = Config.parse_obj(dict(get_driver().config))
 
 P = ParamSpec("P")
 
