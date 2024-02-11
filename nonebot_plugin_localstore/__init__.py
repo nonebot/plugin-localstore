@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Callable, Optional
 from typing_extensions import ParamSpec
 
-from nonebot import get_driver
+from nonebot import get_plugin_config
 from nonebot.plugin import PluginMetadata
 
 from .config import Config
@@ -27,7 +27,7 @@ __plugin_meta__ = PluginMetadata(
     supported_adapters=None,
 )
 
-plugin_config = Config.parse_obj(dict(get_driver().config))
+plugin_config = get_plugin_config(Config)
 
 P = ParamSpec("P")
 
