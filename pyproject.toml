@@ -11,13 +11,13 @@ documentation = "https://github.com/nonebot/plugin-localstore#readme"
 keywords = ["nonebot2", "qq", "plugin"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 nonebot2 = "^2.2.0"
-typing-extensions = ">=4.0.0"
+typing-extensions = "^4.0.0"
 pydantic = ">=1.10.0,<3.0.0,!=2.5.0,!=2.5.1"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.2.0"
+ruff = "^0.5.0"
 isort = "^5.10.1"
 black = "^24.0.0"
 nonemoji = "^0.1.2"
@@ -28,7 +28,7 @@ localstore = "nonebot_plugin_localstore.script:main"
 
 [tool.black]
 line-length = 88
-target-version = ["py38", "py39", "py310", "py311", "py312"]
+target-version = ["py39", "py310", "py311", "py312"]
 include = '\.pyi?$'
 extend-exclude = '''
 '''
@@ -43,18 +43,41 @@ extra_standard_library = ["typing_extensions"]
 
 [tool.ruff]
 line-length = 88
-target-version = "py38"
+target-version = "py39"
 
 [tool.ruff.lint]
-select = ["E", "W", "F", "UP", "C", "T", "Q"]
-ignore = ["E402", "F403", "F405", "C901"]
+select = [
+  "F",     # Pyflakes
+  "W",     # pycodestyle warnings
+  "E",     # pycodestyle errors
+  "UP",    # pyupgrade
+  "ASYNC", # flake8-async
+  "C4",    # flake8-comprehensions
+  "T10",   # flake8-debugger
+  "T20",   # flake8-print
+  "PYI",   # flake8-pyi
+  "PT",    # flake8-pytest-style
+  "Q",     # flake8-quotes
+  "RUF",   # Ruff-specific rules
+]
+ignore = [
+  "E402",   # module-import-not-at-top-of-file
+  "UP037",  # quoted-annotation
+  "RUF001", # ambiguous-unicode-character-string
+  "RUF002", # ambiguous-unicode-character-docstring
+  "RUF003", # ambiguous-unicode-character-comment
+]
+
+[tool.ruff.lint.flake8-pytest-style]
+fixture-parentheses = false
+mark-parentheses = false
 
 [tool.ruff.lint.per-file-ignores]
 "nonebot_plugin_localstore/script.py" = ["T201"]
 "nonebot_plugin_localstore/utils.py" = ["T201"]
 
 [tool.pyright]
-pythonVersion = "3.8"
+pythonVersion = "3.9"
 pythonPlatform = "All"
 
 [build-system]
