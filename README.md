@@ -36,12 +36,12 @@ require("nonebot_plugin_localstore")
 
 import nonebot_plugin_localstore as store
 
-plugin_cache_dir: Path = store.get_cache_dir("plugin_name")
-plugin_cache_file: Path = store.get_cache_file("plugin_name", "filename")
-plugin_config_dir: Path = store.get_config_dir("plugin_name")
-plugin_config_file: Path = store.get_config_file("plugin_name", "filename")
-plugin_data_dir: Path = store.get_data_dir("plugin_name")
-plugin_data_file: Path = store.get_data_file("plugin_name", "filename")
+plugin_cache_dir: Path = store.get_plugin_cache_dir()
+plugin_cache_file: Path = store.get_plugin_cache_file("filename")
+plugin_config_dir: Path = store.get_plugin_config_dir()
+plugin_config_file: Path = store.get_plugin_config_file("filename")
+plugin_data_dir: Path = store.get_plugin_data_dir()
+plugin_data_file: Path = store.get_plugin_data_file("filename")
 ```
 
 ## 存储路径

@@ -15,12 +15,12 @@ __plugin_meta__ = PluginMetadata(
     usage=(
         '声明依赖: `require("nonebot_plugin_localstore")`\n'
         "导入所需文件夹:\n"
-        '  `cache_dir = store.get_cache_dir("plugin_name")`\n'
-        '  `cache_file = store.get_cache_file("plugin_name", "file_name")`\n'
-        '  `data_dir = store.get_data_dir("plugin_name")`\n'
-        '  `data_file = store.get_data_file("plugin_name", "file_name")`\n'
-        '  `config_dir = store.get_config_dir("plugin_name")`\n'
-        '  `config_file = store.get_config_file("plugin_name", "file_name")`'
+        "  `cache_dir = store.get_plugin_cache_dir()`\n"
+        '  `cache_file = store.get_plugin_cache_file("file_name")`\n'
+        "  `data_dir = store.get_plugin_data_dir()`\n"
+        '  `data_file = store.get_plugin_data_file("file_name")`\n'
+        "  `config_dir = store.get_plugin_config_dir()`\n"
+        '  `config_file = store.get_plugin_config_file("file_name")`'
     ),
     type="library",
     homepage="https://github.com/nonebot/plugin-localstore",
