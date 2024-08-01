@@ -93,33 +93,28 @@ def get_data_file(plugin_name: Optional[str], filename: str) -> Path:
     return get_data_dir(plugin_name) / filename
 
 
-def _get_caller_plugin(depth: int = 0) -> Optional[Plugin]:
+def _get_caller_plugin() -> Optional[Plugin]:
     current_frame = inspect.currentframe()
     if current_frame is None:
         return None
 
-    # skip depth of frames
-    frame = current_frame
-    while depth > 0:
-        frame = frame.f_back
-        if frame is None:
-            raise ValueError("Depth out of range")
-        depth -= 1
-
     # find plugin
+    frame = current_frame
     while frame := frame.f_back:
         module_name = (module := inspect.getmodule(frame)) and module.__name__
         if module_name is None:
             return None
 
-        if plugin := get_plugin_by_module_name(module_name):
+        # skip nonebot_plugin_localstore it self
+        plugin = get_plugin_by_module_name(module_name)
+        if plugin and plugin.id_ != "nonebot_plugin_localstore":
             return plugin
 
     return None
 
 
-def _try_get_caller_plugin(depth: int = 0) -> Plugin:
-    if plugin := _get_caller_plugin(depth + 1):
+def _try_get_caller_plugin() -> Plugin:
+    if plugin := _get_caller_plugin():
         return plugin
     raise RuntimeError("Cannot detect caller plugin")
 
@@ -131,7 +126,7 @@ def _get_plugin_path(base_dir: Path, plugin: Plugin) -> Path:
 
 @_auto_create_dir
 def get_plugin_cache_dir() -> Path:
-    plugin = _try_get_caller_plugin(2)
+    plugin = _try_get_caller_plugin()
     return _get_plugin_path(BASE_CACHE_DIR, plugin)
 
 
@@ -141,7 +136,7 @@ def get_plugin_cache_file(filename: str) -> Path:
 
 @_auto_create_dir
 def get_plugin_config_dir() -> Path:
-    plugin = _try_get_caller_plugin(2)
+    plugin = _try_get_caller_plugin()
     return _get_plugin_path(BASE_CONFIG_DIR, plugin)
 
 
@@ -151,7 +146,7 @@ def get_plugin_config_file(filename: str) -> Path:
 
 @_auto_create_dir
 def get_plugin_data_dir() -> Path:
-    plugin = _try_get_caller_plugin(2)
+    plugin = _try_get_caller_plugin()
     return _get_plugin_path(BASE_DATA_DIR, plugin)
 
 
