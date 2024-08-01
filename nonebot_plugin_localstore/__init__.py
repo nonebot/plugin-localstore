@@ -1,9 +1,10 @@
+import inspect
 from pathlib import Path
 from typing import Callable, Optional
 from typing_extensions import ParamSpec
 
 from nonebot import get_plugin_config
-from nonebot.plugin import PluginMetadata
+from nonebot.plugin import Plugin, PluginMetadata, get_plugin_by_module_name
 
 from .config import Config
 from .data_source import user_data_dir, user_cache_dir, user_config_dir
@@ -90,3 +91,69 @@ def get_data_dir(plugin_name: Optional[str]) -> Path:
 
 def get_data_file(plugin_name: Optional[str], filename: str) -> Path:
     return get_data_dir(plugin_name) / filename
+
+
+def _get_caller_plugin(depth: int = 0) -> Optional[Plugin]:
+    current_frame = inspect.currentframe()
+    if current_frame is None:
+        return None
+
+    # skip depth of frames
+    frame = current_frame
+    while depth > 0:
+        frame = frame.f_back
+        if frame is None:
+            raise ValueError("Depth out of range")
+        depth -= 1
+
+    # find plugin
+    while frame := frame.f_back:
+        module_name = (module := inspect.getmodule(frame)) and module.__name__
+        if module_name is None:
+            return None
+
+        if plugin := get_plugin_by_module_name(module_name):
+            return plugin
+
+    return None
+
+
+def _try_get_caller_plugin(depth: int = 0) -> Plugin:
+    if plugin := _get_caller_plugin(depth + 1):
+        return plugin
+    raise RuntimeError("Cannot detect caller plugin")
+
+
+def _get_plugin_path(base_dir: Path, plugin: Plugin) -> Path:
+    parts = plugin.id_.split(":")
+    return base_dir.joinpath(*parts)
+
+
+@_auto_create_dir
+def get_plugin_cache_dir() -> Path:
+    plugin = _try_get_caller_plugin(1)
+    return _get_plugin_path(BASE_CACHE_DIR, plugin)
+
+
+def get_plugin_cache_file(filename: str) -> Path:
+    return get_plugin_cache_dir() / filename
+
+
+@_auto_create_dir
+def get_plugin_config_dir() -> Path:
+    plugin = _try_get_caller_plugin(1)
+    return _get_plugin_path(BASE_CONFIG_DIR, plugin)
+
+
+def get_plugin_config_file(filename: str) -> Path:
+    return get_plugin_config_dir() / filename
+
+
+@_auto_create_dir
+def get_plugin_data_dir() -> Path:
+    plugin = _try_get_caller_plugin(1)
+    return _get_plugin_path(BASE_DATA_DIR, plugin)
+
+
+def get_plugin_data_file(filename: str) -> Path:
+    return get_plugin_data_dir() / filename
