@@ -131,7 +131,7 @@ def _get_plugin_path(base_dir: Path, plugin: Plugin) -> Path:
 
 @_auto_create_dir
 def get_plugin_cache_dir() -> Path:
-    plugin = _try_get_caller_plugin(1)
+    plugin = _try_get_caller_plugin(2)
     return _get_plugin_path(BASE_CACHE_DIR, plugin)
 
 
@@ -141,7 +141,7 @@ def get_plugin_cache_file(filename: str) -> Path:
 
 @_auto_create_dir
 def get_plugin_config_dir() -> Path:
-    plugin = _try_get_caller_plugin(1)
+    plugin = _try_get_caller_plugin(2)
     return _get_plugin_path(BASE_CONFIG_DIR, plugin)
 
 
@@ -151,7 +151,7 @@ def get_plugin_config_file(filename: str) -> Path:
 
 @_auto_create_dir
 def get_plugin_data_dir() -> Path:
-    plugin = _try_get_caller_plugin(1)
+    plugin = _try_get_caller_plugin(2)
     return _get_plugin_path(BASE_DATA_DIR, plugin)
 
 
