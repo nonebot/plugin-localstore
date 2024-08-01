@@ -106,6 +106,9 @@ def _get_caller_plugin() -> Optional[Plugin]:
             return None
 
         # skip nonebot_plugin_localstore it self
+        if module_name.split(".", maxsplit=1)[0] == "nonebot_plugin_localstore":
+            continue
+
         plugin = get_plugin_by_module_name(module_name)
         if plugin and plugin.id_ != "nonebot_plugin_localstore":
             return plugin
