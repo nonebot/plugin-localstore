@@ -2,27 +2,26 @@ from pathlib import Path
 
 import pytest
 import nonebot
-from nonebug.app import App
-from pytest_mock import MockerFixture
 from nonebug import NONEBOT_INIT_KWARGS
 
 
 def pytest_configure(config: pytest.Config) -> None:
-    config.stash[NONEBOT_INIT_KWARGS] = {
-        "driver": "~none",
-    }
+    config.stash[NONEBOT_INIT_KWARGS] = {"driver": "~none"}
 
 
 @pytest.fixture(scope="session")
-def _load_plugin(nonebug_init: None):
-    nonebot.load_plugin("tests.plugin")
+def tmp_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    return tmp_path_factory.mktemp("nonebot_plugin_localstore")
 
 
-@pytest.fixture
-def app(_load_plugin: None, tmp_path: Path, mocker: MockerFixture):
-    # 插件数据目录
-    mocker.patch("nonebot_plugin_localstore.BASE_DATA_DIR", tmp_path / "data")
-    mocker.patch("nonebot_plugin_localstore.BASE_CACHE_DIR", tmp_path / "cache")
-    mocker.patch("nonebot_plugin_localstore.BASE_CONFIG_DIR", tmp_path / "config")
+@pytest.fixture(scope="session", autouse=True)
+def _load_plugin(nonebug_init: None, tmp_path: Path):
+    nonebot.load_plugin("nonebot_plugin_localstore")
 
-    return App()
+    with pytest.MonkeyPatch.context() as m:
+        m.setattr("nonebot_plugin_localstore.BASE_DATA_DIR", tmp_path / "data")
+        m.setattr("nonebot_plugin_localstore.BASE_CACHE_DIR", tmp_path / "cache")
+        m.setattr("nonebot_plugin_localstore.BASE_CONFIG_DIR", tmp_path / "config")
+
+        nonebot.load_plugin("tests.plugin")
+        yield
