@@ -13,7 +13,6 @@ def test_plugin_dir(tmp_path: Path):
 
 
 def test_sub_plugin_dir(tmp_path: Path):
-    """获取到子插件的缓存目录、配置目录和数据目录"""
     from tests.plugin.plugins.sub_plugin import data_dir, cache_dir, config_dir
 
     assert data_dir == tmp_path / "data" / "plugin" / "sub_plugin"
