@@ -73,3 +73,32 @@ nb localstore
 - Unix: `~/.config/<AppName>`
 - Win XP (roaming): `C:\Documents and Settings\<username>\Local Settings\Application Data\<AppName>`
 - Win 7 (roaming): `C:\Users\<username>\AppData\Roaming\<AppName>`
+
+## 配置项
+
+插件支持配置全局存储路径，也支持为插件单独配置存储路径。
+
+```dotenv
+LOCALSTORE_CACHE_DIR=/tmp/cache
+LOCALSTORE_DATA_DIR=/tmp/data
+LOCALSTORE_CONFIG_DIR=/tmp/config
+
+LOCALSTORE_PLUGIN_CACHE_DIR='
+{
+  "plugin1": "/tmp/plugin1/cache",
+  "plugin2:sub_plugin": "/tmp/plugin2/sub_plugin/cache"
+}
+'
+LOCALSTORE_PLUGIN_DATA_DIR='
+{
+  "plugin1": "/tmp/plugin1/data",
+  "plugin2:sub_plugin": "/tmp/plugin2/sub_plugin/data"
+}
+'
+LOCALSTORE_PLUGIN_CONFIG_DIR='
+{
+  "plugin1": "/tmp/plugin1/config",
+  "plugin2:sub_plugin": "/tmp/plugin2/sub_plugin/config"
+}
+'
+```

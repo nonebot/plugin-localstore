@@ -23,5 +23,19 @@ def after_nonebot_init(after_nonebot_init: None, tmp_path: Path):
         m.setattr("nonebot_plugin_localstore.BASE_CACHE_DIR", tmp_path / "cache")
         m.setattr("nonebot_plugin_localstore.BASE_CONFIG_DIR", tmp_path / "config")
 
+        m.setattr(
+            "nonebot_plugin_localstore.plugin_config.localstore_plugin_data_dir",
+            {"spec_plugin": tmp_path / "spec_plugin_data"},
+        )
+        m.setattr(
+            "nonebot_plugin_localstore.plugin_config.localstore_plugin_cache_dir",
+            {"spec_plugin": tmp_path / "spec_plugin_cache"},
+        )
+        m.setattr(
+            "nonebot_plugin_localstore.plugin_config.localstore_plugin_config_dir",
+            {"spec_plugin": tmp_path / "spec_plugin_config"},
+        )
+
         nonebot.load_plugin("tests.plugin")
+        nonebot.load_plugin("tests.spec_plugin")
         yield

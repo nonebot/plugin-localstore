@@ -122,15 +122,29 @@ def _try_get_caller_plugin() -> Plugin:
     raise RuntimeError("Cannot detect caller plugin")
 
 
-def _get_plugin_path(base_dir: Path, plugin: Plugin) -> Path:
-    parts = plugin.id_.split(":")
-    return base_dir.joinpath(*parts)
+def _get_plugin_path(
+    base_dir: Path, plugin_dir: dict[str, Path], plugin: Plugin
+) -> Path:
+    parts: list[str] = []
+    plugin_id = plugin.id_
+    while True:
+        if plugin_id in plugin_dir:
+            return plugin_dir[plugin_id].joinpath(*reversed(parts))
+        elif ":" not in plugin_id:
+            break
+
+        plugin_id, part = plugin_id.rsplit(":", maxsplit=1)
+        parts.append(part)
+
+    return base_dir.joinpath(plugin_id, *reversed(parts))
 
 
 @_auto_create_dir
 def get_plugin_cache_dir() -> Path:
     plugin = _try_get_caller_plugin()
-    return _get_plugin_path(BASE_CACHE_DIR, plugin)
+    return _get_plugin_path(
+        BASE_CACHE_DIR, plugin_config.localstore_plugin_cache_dir, plugin
+    )
 
 
 def get_plugin_cache_file(filename: str) -> Path:
@@ -140,7 +154,9 @@ def get_plugin_cache_file(filename: str) -> Path:
 @_auto_create_dir
 def get_plugin_config_dir() -> Path:
     plugin = _try_get_caller_plugin()
-    return _get_plugin_path(BASE_CONFIG_DIR, plugin)
+    return _get_plugin_path(
+        BASE_CONFIG_DIR, plugin_config.localstore_plugin_config_dir, plugin
+    )
 
 
 def get_plugin_config_file(filename: str) -> Path:
@@ -150,7 +166,9 @@ def get_plugin_config_file(filename: str) -> Path:
 @_auto_create_dir
 def get_plugin_data_dir() -> Path:
     plugin = _try_get_caller_plugin()
-    return _get_plugin_path(BASE_DATA_DIR, plugin)
+    return _get_plugin_path(
+        BASE_DATA_DIR, plugin_config.localstore_plugin_data_dir, plugin
+    )
 
 
 def get_plugin_data_file(filename: str) -> Path:
