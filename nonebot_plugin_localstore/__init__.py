@@ -4,10 +4,10 @@ from typing import Callable, Optional
 
 from nonebot import get_plugin_config
 from nonebot.plugin import Plugin, PluginMetadata, get_plugin_by_module_name
+from nonestorage import user_cache_dir, user_config_dir, user_data_dir
 from typing_extensions import ParamSpec
 
 from .config import Config
-from .data_source import user_cache_dir, user_config_dir, user_data_dir
 
 __plugin_meta__ = PluginMetadata(
     name="本地数据存储",
