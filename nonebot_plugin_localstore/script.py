@@ -1,8 +1,8 @@
-from typing import Callable
 from argparse import ArgumentParser
+from typing import Callable
 
+from . import BASE_CACHE_DIR, BASE_CONFIG_DIR, BASE_DATA_DIR
 from .utils import remove_dir, show_dir_detail
-from . import BASE_DATA_DIR, BASE_CACHE_DIR, BASE_CONFIG_DIR
 
 parser = ArgumentParser("nb localstore")
 

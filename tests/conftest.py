@@ -1,7 +1,7 @@
 from pathlib import Path
 
-import pytest
 import nonebot
+import pytest
 from nonebug import NONEBOT_INIT_KWARGS
 
 
@@ -15,7 +15,7 @@ def tmp_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
 
 
 @pytest.fixture(scope="session", autouse=True)
-def _load_plugin(nonebug_init: None, tmp_path: Path):
+def after_nonebot_init(after_nonebot_init: None, tmp_path: Path):
     nonebot.load_plugin("nonebot_plugin_localstore")
 
     with pytest.MonkeyPatch.context() as m:

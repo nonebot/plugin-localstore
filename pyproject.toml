@@ -17,10 +17,8 @@ typing-extensions = "^4.0.0"
 pydantic = ">=1.10.0,<3.0.0,!=2.5.0,!=2.5.1"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.7.0"
-isort = "^5.10.1"
-black = "^24.0.0"
-nonebug = "^0.3.7"
+ruff = "^0.8.0"
+nonebug = "^0.4.3"
 nonemoji = "^0.1.2"
 pre-commit = "^4.0.0"
 pytest-cov = "^6.0.0"
@@ -32,30 +30,19 @@ localstore = "nonebot_plugin_localstore.script:main"
 [tool.pytest.ini_options]
 addopts = "--cov=./nonebot_plugin_localstore --cov-report=term-missing"
 
-[tool.black]
-line-length = 88
-target-version = ["py39", "py310", "py311", "py312"]
-include = '\.pyi?$'
-extend-exclude = '''
-'''
-
-[tool.isort]
-profile = "black"
-line_length = 88
-length_sort = true
-skip_gitignore = true
-force_sort_within_sections = true
-extra_standard_library = ["typing_extensions"]
-
 [tool.ruff]
 line-length = 88
 target-version = "py39"
+
+[tool.ruff.format]
+line-ending = "lf"
 
 [tool.ruff.lint]
 select = [
   "F",     # Pyflakes
   "W",     # pycodestyle warnings
   "E",     # pycodestyle errors
+  "I",     # isort
   "UP",    # pyupgrade
   "ASYNC", # flake8-async
   "C4",    # flake8-comprehensions
@@ -64,6 +51,7 @@ select = [
   "PYI",   # flake8-pyi
   "PT",    # flake8-pytest-style
   "Q",     # flake8-quotes
+  "TID",   # flake8-tidy-imports
   "RUF",   # Ruff-specific rules
 ]
 ignore = [

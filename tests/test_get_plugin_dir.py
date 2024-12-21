@@ -2,7 +2,7 @@ from pathlib import Path
 
 
 def test_plugin_dir(tmp_path: Path):
-    from tests.plugin import data_dir, cache_dir, config_dir
+    from tests.plugin import cache_dir, config_dir, data_dir
 
     assert data_dir == tmp_path / "data" / "plugin"
     assert data_dir.is_dir()
@@ -13,7 +13,7 @@ def test_plugin_dir(tmp_path: Path):
 
 
 def test_sub_plugin_dir(tmp_path: Path):
-    from tests.plugin.plugins.sub_plugin import data_dir, cache_dir, config_dir
+    from tests.plugin.plugins.sub_plugin import cache_dir, config_dir, data_dir
 
     assert data_dir == tmp_path / "data" / "plugin" / "sub_plugin"
     assert data_dir.is_dir()

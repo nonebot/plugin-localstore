@@ -1,13 +1,13 @@
 import inspect
 from pathlib import Path
 from typing import Callable, Optional
-from typing_extensions import ParamSpec
 
 from nonebot import get_plugin_config
 from nonebot.plugin import Plugin, PluginMetadata, get_plugin_by_module_name
+from typing_extensions import ParamSpec
 
 from .config import Config
-from .data_source import user_data_dir, user_cache_dir, user_config_dir
+from .data_source import user_cache_dir, user_config_dir, user_data_dir
 
 __plugin_meta__ = PluginMetadata(
     name="本地数据存储",
