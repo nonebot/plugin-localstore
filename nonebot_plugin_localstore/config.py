@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 
 
 class Config(BaseModel):
+    localstore_use_cwd: bool = False
     localstore_cache_dir: Optional[Path] = None
     localstore_config_dir: Optional[Path] = None
     localstore_data_dir: Optional[Path] = None
