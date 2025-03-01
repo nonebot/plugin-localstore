@@ -54,20 +54,29 @@ nb localstore
 
 参考路径如下：
 
-### cache path
+### `LOCALSTORE_USE_CWD` 为 true 时:
+- cache path: `<CurrentWorkspaceDir>/cache/`
+- data path: `<CurrentWorkspaceDir>/data/`
+- config path: `<CurrentWorkspaceDir>/config/`
+
+(`CurrentWorkspaceDir` 一般为 nonebot 实例的运行目录)
+
+### `LOCALSTORE_USE_CWD` 为 false / 未配置时:
+
+#### cache path
 
 - macOS: `~/Library/Caches/<AppName>`
 - Unix: `~/.cache/<AppName>` (XDG default)
 - Windows: `C:\Users\<username>\AppData\Local\<AppName>\Cache`
 
-### data path
+#### data path
 
 - macOS: `~/Library/Application Support/<AppName>`
 - Unix: `~/.local/share/<AppName>` or in $XDG_DATA_HOME, if defined
 - Win XP (not roaming): `C:\Documents and Settings\<username>\Application Data\<AppName>`
 - Win 7 (not roaming): `C:\Users\<username>\AppData\Local\<AppName>`
 
-### config path
+#### config path
 
 - macOS: same as user_data_dir
 - Unix: `~/.config/<AppName>`
