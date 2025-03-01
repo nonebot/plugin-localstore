@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nonebot-plugin-localstore"
-version = "0.7.3"
+version = "0.7.4"
 description = "Local Storage Support for NoneBot2"
 authors = ["yanyongyu <yyy@nonebot.dev>"]
 license = "MIT"
@@ -18,7 +18,7 @@ typing-extensions = "^4.0.0"
 pydantic = ">=1.10.0,<3.0.0,!=2.5.0,!=2.5.1"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.8.0"
+ruff = "^0.9.0"
 nonebug = "^0.4.3"
 nonemoji = "^0.1.2"
 pre-commit = "^4.0.0"
