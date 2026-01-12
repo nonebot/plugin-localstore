@@ -1,32 +1,44 @@
-[tool.poetry]
+[project]
 name = "nonebot-plugin-localstore"
 version = "0.7.4"
 description = "Local Storage Support for NoneBot2"
-authors = ["yanyongyu <yyy@nonebot.dev>"]
-license = "MIT"
+authors = [{ name = "yanyongyu", email = "yyy@nonebot.dev" }]
+requires-python = ">=3.9,<4"
 readme = "README.md"
-homepage = "https://github.com/nonebot/plugin-localstore"
-repository = "https://github.com/nonebot/plugin-localstore"
-documentation = "https://github.com/nonebot/plugin-localstore#readme"
+license = "MIT"
 keywords = ["nonebot2", "qq", "plugin"]
+dependencies = [
+  "nonebot2>=2.3.0,<3",
+  "nonestorage>=0.1.0,<0.2",
+  "typing-extensions>=4.0.0,<5",
+  "pydantic>=1.10.0,<3.0.0,!=2.5.0,!=2.5.1",
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-nonebot2 = "^2.3.0"
-nonestorage = "^0.1.0"
-typing-extensions = "^4.0.0"
-pydantic = ">=1.10.0,<3.0.0,!=2.5.0,!=2.5.1"
+[project.urls]
+Homepage = "https://github.com/nonebot/plugin-localstore"
+Repository = "https://github.com/nonebot/plugin-localstore"
+Documentation = "https://github.com/nonebot/plugin-localstore#readme"
 
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.9.0"
-nonebug = "^0.4.3"
-nonemoji = "^0.1.2"
-pre-commit = "^4.0.0"
-pytest-cov = "^6.0.0"
-pytest-xdist = "^3.6.1"
-
-[tool.poetry.plugins.nb_scripts]
+[project.entry-points.nb_scripts]
 localstore = "nonebot_plugin_localstore.script:main"
+
+[dependency-groups]
+dev = [
+  "ruff>=0.9.0,<0.10",
+  "nonebug>=0.4.3,<0.5",
+  "nonemoji>=0.1.2,<0.2",
+  "pre-commit>=4.0.0,<5",
+  "pytest-cov>=6.0.0,<7",
+  "pytest-xdist>=3.6.1,<4",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.23,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "nonebot_plugin_localstore"
+module-root = ""
 
 [tool.pytest.ini_options]
 addopts = "--cov=./nonebot_plugin_localstore --cov-report=term-missing"
@@ -78,7 +90,3 @@ pythonPlatform = "All"
 typeCheckingMode = "standard"
 reportShadowedImports = false
 disableBytesTypePromotions = true
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
